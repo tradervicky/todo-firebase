@@ -86,7 +86,7 @@ function App() {
     <Toaster />
       <div className="min-h-screen flex flex-col gap-4 items-center justify-center p-4 bg-custom-background bg-center bg-cover ">
         <div className="bg-gray-100 p-6 rounded shadow-md w-full max-w-lg lg:w-1/4">
-          <h1 className="text-3xl font-bold text-center mb-4">Todo App</h1>
+          <h1 className="text-3xl font-bold text-center mb-4">OrganizeMe</h1>
           <div className="flex gap-2">
             <input type="text"
             value={input}

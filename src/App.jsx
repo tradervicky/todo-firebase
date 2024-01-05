@@ -74,11 +74,15 @@ function App() {
           <ul>
             { todos.length>0 && (
               todos.map((data, index)=>
-              <li key={index} className="flex items-center justify-between bg-white p-3 mb-2 rounded shadow-md ">
-              <span className="text-lg font-medium">{data.todo}</span>
-              <div>
-              <button onClick={()=>clickEdit(index)} className="mr-2 px-4 py-2 rounded text-white bg-gradient-to-r from-gray-400 to-black hover:from-gray-500 hover:to-gray-400 transition-duration: 300ms"><FaEdit/></button>
-              <button onClick={()=>clickDelete(data.id)} className="px-4 py-2 rounded text-white bg-red-500 hover:to-gray-400 transition-duration: 300ms"><FaTrash /></button>
+              <li key={index} className="flex items-center justify-between bg-white sm:p-2 p-3 sm:mb-1 mb-2 rounded shadow-md">
+              <span className="text-lg sm:text-sm font-medium">{data.todo}</span>
+              <div className="flex">
+                <button onClick={() => clickEdit(index)} className="mr-2 px-4 py-2 rounded text-white bg-gradient-to-r from-gray-400 to-black hover:from-gray-500 hover:to-gray-400 transition-duration: 300ms">
+                  <FaEdit/>
+                </button>
+                <button onClick={() => clickDelete(data.id)} className="px-4 py-2 rounded text-white bg-red-500 hover:to-gray-400 transition-duration: 300ms">
+                  <FaTrash />
+                </button>
               </div>
             </li>
               ))

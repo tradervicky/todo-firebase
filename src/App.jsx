@@ -3,6 +3,9 @@ import { useEffect } from "react";
 import { useState } from "react";
 import { FaEdit, FaTrash  } from "react-icons/fa";
 import { db } from "./firebase";
+import toast, { Toaster } from 'react-hot-toast';
+import { confirmAlert } from 'react-confirm-alert'; // Import the library
+import 'react-confirm-alert/src/react-confirm-alert.css';
 
 function App() {
   const [todos, setTodos] = useState([])
@@ -20,10 +23,12 @@ function App() {
       // setTodos([...todos, {id: new Date(), todo: input}])
       await addDoc(collection(db,'todos'), {todo : input})
       setInput('')
+      toast.success('Todo added successfully!');
     }
 
   }catch(err){
     console.error(err.message)
+    toast.error('Failed to add todo.');
   }
  }
  const clickEdit = (index)=>{
@@ -32,12 +37,28 @@ function App() {
 
  }
  const clickDelete = async(id)=>{
-  try{
-    await deleteDoc(doc(db,'todos', id))
-
-  }catch(err){
-    console.log(err)
-  }
+  confirmAlert({
+    title: 'Confirm Deletion',
+    message: 'Are you sure you want to delete this todo?',
+    buttons: [
+      {
+        label: 'Yes',
+        onClick: async () => {
+          try {
+            await deleteDoc(doc(db, 'todos', id))
+            toast.success('Todo deleted successfully!');
+          } catch (err) {
+            console.log(err)
+            toast.error('Failed to delete todo.');
+          }
+        }
+      },
+      {
+        label: 'No',
+        onClick: () => {} 
+      }
+    ]
+  });
  }
  const updateData =async ()=>{
   try{
@@ -46,15 +67,23 @@ function App() {
       await updateDoc(todoDocRef, {todo: input});
       setInput('')
       setEditIndex(-1)
+      toast.success('Todo updated successfully!');
     }
 
   }catch(err){
     console.error(err.message)
+    toast.error('Failed to update todo.');
   }
 
  }
+ const handleEnterKeyPress = (e) => {
+  if (e.key === 'Enter') {
+    editIndex === -1 ? addTodo() : updateData();
+  }
+}
   return (
     <>
+    <Toaster />
       <div className="min-h-screen flex flex-col gap-4 items-center justify-center p-4 bg-custom-background bg-center bg-cover ">
         <div className="bg-gray-100 p-6 rounded shadow-md w-full max-w-lg lg:w-1/4">
           <h1 className="text-3xl font-bold text-center mb-4">Todo App</h1>
@@ -64,6 +93,7 @@ function App() {
             placeholder="Add a todo"
             className="py-2 px-4 border rounded w-full focus:outline-none"
             onChange={(e)=>setInput(e.target.value)}
+            onKeyDown={handleEnterKeyPress}
             />
             <button onClick={editIndex===-1 ? addTodo : updateData} className="bg-gradient-to-r from-blue-400 to-blue-600 text-white py-2 px-4 rounded">
             {editIndex===-1 ? "+Add" : "Update"}
